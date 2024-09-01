@@ -56,14 +56,23 @@ else
 
 @code {
     private IEnumerable<Category> Categories { get; set; } = new List<Category>();
-    private bool IsProcessing { get; set; } = false;
+    private bool IsProcessing { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
-        IsProcessing = true;
-        await LoadCategories();
-        IsProcessing = false;
+
     }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadCategories();
+            IsProcessing = false;
+            StateHasChanged();
+
+        }
+    }
+
 
     private async Task LoadCategories()
     {
