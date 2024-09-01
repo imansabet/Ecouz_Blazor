@@ -1,4 +1,5 @@
 ﻿@page "/category"
+@inject ICategoryRepository _categoryRepository
 
 @if (IsProcessing)
 {
@@ -25,13 +26,37 @@ else
                     <button class="btn btn-secondary" style="width:250px;" >Add New Category</button>
                 </div>
             </div>
-            <p>Category's List</p>
+            @if (Categories.Any())
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Category Name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var obj in Categories)
+                        {
+                            <tr>
+                                <td>
+                                    @obj.Name
+                                </td>
+                                <td>
+                                    Buttons
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
         </div>
     </div>
 }
 
 @code {
-    public bool IsProcessing { get; set; } = false;
+    private IEnumerable<Category> Categories { get; set; } = new List<Category>();
+    private bool IsProcessing { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -40,9 +65,11 @@ else
         LoadCategories();
         IsProcessing = false;
     }
+
     private void LoadCategories()
     {
-        
+        Categories =  _categoryRepository.GetAll();
+
     }
 
 }
