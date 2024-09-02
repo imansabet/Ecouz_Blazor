@@ -14,10 +14,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Extensions\" />
-    <Folder Include="Services\" />
-    <Folder Include="wwwroot\js\" />
-  </ItemGroup>
-
 </Project>
