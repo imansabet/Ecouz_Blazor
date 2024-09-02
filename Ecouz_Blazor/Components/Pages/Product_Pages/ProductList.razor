@@ -1,4 +1,5 @@
 ﻿@page "/product"
+@using System.Globalization
 @inject IProductRepository _ProductRepository
 @inject IJSRuntime _JS
 
@@ -40,10 +41,13 @@ else
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Product Name</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Special Tag</th>
+                            <th>Category</th>
                             <th></th>
                         </tr>
-                    </thead> 
+                    </thead>
                     <tbody>
                         @foreach (var obj in Products)
                         {
@@ -51,8 +55,11 @@ else
                                 <td>
                                     @obj.Name
                                 </td>
+                                <td>@obj.Price.ToString("C", CultureInfo.GetCultureInfo("en-us"))</td>
+                                <td><span class="badge text-bg-info"> @obj.SpecialTag</span></td>
+                                <td>@obj.Category.Name</td>
                                 <td>
-                                    <a href="@($"Product/update/{obj.Id}")" class="btn btn-primary">
+                                    <a href="@($"product/update/{obj.Id}")" class="btn btn-primary">
                                         <i class="bi bi-pencil-square"></i> Edit
                                     </a>
                                     <button class="btn btn-danger" @onclick="()=>HandleDelete(obj.Id)">
