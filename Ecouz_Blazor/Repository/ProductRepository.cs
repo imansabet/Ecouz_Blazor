@@ -7,10 +7,14 @@ namespace Ecouz_Blazor.Repository
     public class ProductRepository : IProductRepository
     {
         private readonly ApplicationDbContext _db;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductRepository(ApplicationDbContext db)
+
+        public ProductRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
+            _webHostEnvironment = webHostEnvironment;
+
         }
         public async Task<Product> CreateAsync(Product obj)
         {
@@ -22,7 +26,12 @@ namespace Ecouz_Blazor.Repository
         public async Task<bool> DeleteAsync(int id)
         {
             var obj =  await _db.Products.FirstOrDefaultAsync(u => u.Id == id);
-            if(obj != null)
+            var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, obj.ImageUrl.TrimStart('/'));
+            if (File.Exists(imagePath))
+            {
+                File.Delete(imagePath);
+            }
+            if (obj != null)
             {
                  _db.Products.Remove(obj);
                 return  (await _db.SaveChangesAsync()) > 0;
@@ -32,7 +41,7 @@ namespace Ecouz_Blazor.Repository
 
         public async  Task<IEnumerable<Product>> GetAllAsync()
         {
-            return await _db.Products.ToListAsync();
+            return await _db.Products.Include(u => u.Category).ToListAsync();
         }
 
         public async Task<Product> GetAsync(int id)
