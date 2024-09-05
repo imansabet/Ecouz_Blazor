@@ -8,8 +8,9 @@ namespace Ecouz_Blazor.Data
         public DbSet<Category> Category { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ShoppingCart> ShoppingCart { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder builder)
+		public DbSet<OrderHeader> OrderHeader { get; set; }
+		public DbSet<OrderDetail> OrderDetail { get; set; }
+		protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.Entity<Category>().HasData(
