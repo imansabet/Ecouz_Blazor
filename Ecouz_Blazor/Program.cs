@@ -3,6 +3,7 @@ using Ecouz_Blazor.Components.Account;
 using Ecouz_Blazor.Data;
 using Ecouz_Blazor.Repository;
 using Ecouz_Blazor.Repository.IRepository;
+using Ecouz_Blazor.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,9 @@ builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-builder.Services.AddRadzenComponents();
+builder.Services.AddRadzenComponents(); 
+builder.Services.AddSingleton<SharedStateService>();
+
 
 builder.Services.AddAuthentication(options =>
     {

@@ -2,10 +2,13 @@
 @using Ecouz_Blazor.Utility
 @using Microsoft.AspNetCore.Authorization
 @using System.Globalization
+@using Ecouz_Blazor.Services
 @inject AuthenticationStateProvider _AuthenticationStateProvider
 @inject IShoppingCartRepository _cartRepository
 @inject IOrderRepository _orderRepository
 @inject NavigationManager _navManager
+@inject SharedStateService _sharedStateService
+
 @attribute [Authorize]
 
 
@@ -177,10 +180,10 @@ else
 	{
 
 
-
 		//add item to cart
 		var result = await
 		_cartRepository.UpdateCartAsync(OrderHeader.UserId, productId, updateBy);
+		_sharedStateService.TotalCartCount = await _cartRepository.GetTotalCartCountAsync(OrderHeader.UserId);
 		await LoadCart();
 	}
 

@@ -54,6 +54,16 @@ namespace Ecouz_Blazor.Repository
             }
             return await _db.SaveChangesAsync() > 0;
         }
+        public async Task<int> GetTotalCartCountAsync(string? userId)
+        {
+            int cartCount = 0;
+            var cartItems = await _db.ShoppingCart.Where(u => u.UserId == userId).ToListAsync();
 
+            foreach (var item in cartItems)
+            {
+                cartCount += item.Count;
+            }
+            return cartCount;
+        }
     }
 }
