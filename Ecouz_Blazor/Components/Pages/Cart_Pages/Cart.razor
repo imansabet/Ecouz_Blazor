@@ -4,6 +4,8 @@
 @using System.Globalization
 @inject AuthenticationStateProvider _AuthenticationStateProvider
 @inject IShoppingCartRepository _cartRepository
+@inject IOrderRepository _orderRepository
+@inject NavigationManager _navManager
 @attribute [Authorize]
 
 
@@ -157,7 +159,7 @@ else
 
 	private async Task LoadCart()
 	{
-		
+
 		ShoppingCarts = await _cartRepository.GetAllAsync(OrderHeader.UserId);
 
 		OrderHeader.OrderTotal = 0;
@@ -173,7 +175,7 @@ else
 
 	private async Task UpdateCartItem(int productId, int updateBy)
 	{
-	
+
 
 
 		//add item to cart
@@ -184,6 +186,11 @@ else
 
 	private async Task ProcessOrderCreation()
 	{
+		IsProcessing = true;
+		await Task.Yield();
+		OrderHeader.OrderDetails = SD.ConvertShoppingCartListToOrderDetail(ShoppingCarts.ToList());
 
+		await _orderRepository.CreateAsync(OrderHeader);
+		_navManager.NavigateTo($"/order/confirmation/{OrderHeader.Id}");
 	}
 }
